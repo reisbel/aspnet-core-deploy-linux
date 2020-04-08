@@ -105,7 +105,7 @@ dotnet publish --configuration Release
 Every application runs its instance of a web server called Kestrel, which by default will listen on port 5000. To run our website we must create a systemd service.
 
 ```bash
-sudo nano /etc/systemd/system/aspnet-core-deploy-linux
+sudo nano /etc/systemd/system/aspnet-core-deploy-linux.service
 ```
 
 ```config
@@ -174,7 +174,7 @@ sudo nano /etc/apache2/sites-available/aspnet-core-deploy-linux.conf
 Disable the default apache website
 
 ```bash
-sudo a2dissite default
+sudo a2dissite 000-default
 ```
 
 And finally, enable the new apache site configuration.
@@ -183,7 +183,13 @@ And finally, enable the new apache site configuration.
 sudo a2ensite aspnet-core-deploy-linux
 ```
 
-You should be able to query the external address and see the website
+Restart Apache to apply all the changes
+
+```bash
+sudo systemctl restart apache2
+```
+
+You should be able to query the external address and open the website from your computer
 
 ```bash
 export publiIP=$(gcloud compute instances describe $INSTANCE_NAME --zone=$ZONE --format="value(networkInterfaces[0].accessConfigs.natIP)")
